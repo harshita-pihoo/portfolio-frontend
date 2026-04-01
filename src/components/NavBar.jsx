@@ -12,7 +12,8 @@ const NavBar = () => {
           <Link to="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</Link>
           <Link to="/resume" className="text-gray-300 hover:text-white transition-colors">Resume</Link>
           <Link to="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link>
-          <Link to="/admin" className="text-gray-300 hover:text-white transition-colors">Admin</Link>
+          {/* <Link to="/admin" className="text-gray-300 hover:text-white transition-colors">Admin</Link> */}
+          <Link to="/admin/login" className="text-gray-300 hover:text-white transition-colors">Admin</Link>
         </div>
       </div>
     </nav>

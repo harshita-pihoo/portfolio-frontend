@@ -7,17 +7,30 @@ const AdminPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     try {
       const response = await api.post('/auth/login', { username, password });
-      login(response.data.token);
-      navigate('/admin');
+      console.log('Response:', response.data);
+
+      if (response.data.token) {
+        login(response.data.token);
+        navigate('/admin');
+      } else {
+        setError('No token received');
+      }
     } catch (err) {
+      console.error('Error:', err.response?.data || err.message);
       setError('Invalid username or password');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,6 +42,7 @@ const AdminPage = () => {
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input
             type="text"
+            id="username"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -36,6 +50,7 @@ const AdminPage = () => {
           />
           <input
             type="password"
+            id="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -43,9 +58,10 @@ const AdminPage = () => {
           />
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-3 rounded-lg font-semibold transition-colors"
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>
