@@ -19,11 +19,18 @@ const ResumePage = () => {
     fetchResume();
   }, []);
 
+  const getPreviewUrl = (url) => {
+    if (!url) return "";
+    return url
+      .replace("/view?usp=sharing", "/preview")
+      .replace("/view?usp=drive_link", "/preview")
+      .replace("/view", "/preview");
+  };
+
   return (
     <div className="min-h-screen bg-black pt-24 px-6 pb-16">
       <div className="max-w-4xl mx-auto">
 
-        {/* Header */}
         <div className="mb-12">
           <h1 className="text-white text-5xl font-bold mb-4">Resume</h1>
           <div className="w-16 h-1 bg-indigo-500 rounded-full mb-6" />
@@ -39,7 +46,6 @@ const ResumePage = () => {
         ) : resumeUrl ? (
           <div className="flex flex-col gap-6">
 
-            {/* Download button */}
             <div className="flex gap-4">
               <a
                 href={resumeUrl}
@@ -59,13 +65,13 @@ const ResumePage = () => {
               </a>
             </div>
 
-            {/* PDF Preview */}
             <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
               <iframe
-                src={resumeUrl}
+                src={getPreviewUrl(resumeUrl)}
                 className="w-full"
                 style={{ height: "80vh" }}
                 title="Resume"
+                allow="autoplay"
               />
             </div>
 
