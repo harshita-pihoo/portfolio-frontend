@@ -1,56 +1,74 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-const ResumePage = () => {
-  const [resumeUrl, setResumeUrl] = useState("");
+const NavBar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
-  useEffect(() => {
-    api.get("/api/resume")
-      .then((res) => {
-        setResumeUrl(res.data.url);
-      })
-      .catch(() => {
-        console.log("No resume found");
-      });
-  }, []);
-
-  if (!resumeUrl) {
-    return (
-      <div className="text-white text-center mt-32">
-        No resume uploaded yet
-      </div>
-    );
-  }
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: "Resume", path: "/resume" },
+    { name: "Contact", path: "/contact" },
+    { name: "Admin", path: "/admin/login" },
+  ];
 
   return (
-    <div className="min-h-screen bg-black pt-20 px-6">
-      <div className="max-w-5xl mx-auto">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-white/10">
+      <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+        
+        {/* Logo */}
+        <Link to="/" className="text-white font-bold text-xl tracking-tight">
+          Portfolio
+        </Link>
 
-        <h1 className="text-white text-3xl font-bold mb-6 text-center">
-          My Resume
-        </h1>
-
-        {/* Resume Viewer */}
-        <iframe
-          src={resumeUrl}
-          title="Resume"
-          className="w-full h-[600px] rounded-lg border border-white/10"
-        />
-
-        {/* Download Button */}
-        <div className="text-center mt-6">
-          <a
-            href={resumeUrl}
-            download
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold"
-          >
-            ⬇ Download Resume
-          </a>
+        {/* Desktop Links */}
+        <div className="hidden md:flex gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === link.path
+                  ? "text-indigo-400"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
 
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden text-gray-400 hover:text-white"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </div>
-    </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-black/90 border-t border-white/10 px-6 py-4 flex flex-col gap-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={() => setMenuOpen(false)}
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === link.path
+                  ? "text-indigo-400"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      )}
+    </nav>
   );
 };
 
-export default ResumePage;
+export default NavBar;
