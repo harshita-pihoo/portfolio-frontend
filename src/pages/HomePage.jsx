@@ -263,7 +263,7 @@ const HomePage = () => {
                 GitHub
               </a>
               <a
-                href="www.linkedin.com/in/harshita-ranjan26"
+                href="https://www.linkedin.com/in/harshita-ranjan26"
                 target="_blank"
                 rel="noreferrer"
                 className="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-all"
